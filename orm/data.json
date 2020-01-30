@@ -53,15 +53,15 @@
   ],
   "potentialNextStep": [
     {
-      "position": "ddd",
+      "position": "aaa",
       "readiness": "ready !"
     },
     {
-      "position": "ddd",
-      "readiness": "ready !"
+      "position": "ddd ff gg gg",
+      "readiness": "not ready !"
     },
     {
-      "position": "ddd",
+      "position": "dd ee @ dsfsd qsdf qs",
       "readiness": "ready !"
     }
   ],
