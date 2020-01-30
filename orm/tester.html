@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico"/>
+    <link rel="mask-icon" type=""
+          href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+          color="#111"/>
+    <title>CodePen - Redesigned - Company Employees Hierarchy Chart </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel='stylesheet prefetch'
+          href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto'>
+
+    <link rel='stylesheet prefetch' href='./lib/organigram/css/organigram.css'>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+    <script src='./lib/organigram/js/organigram.js'></script>
+
+</head>
+
+<body translate="no">
+
+<div id="full-container">
+    <button class="btn-action btn-fullscreen" onclick="params.funcs.toggleFullScreen()">Fullscreen <span class='icon'/>
+        <i class="fa fa-arrows-alt" aria-hidden="true"></i></span></button>
+    <button class="btn-action btn-show-my-self" onclick="params.funcs.showMySelf()"> Show myself <span class='icon'/> <i
+            class="fa fa-user" aria-hidden="true"></i></span></button>
+
+    <button class=" btn-action btn-search" onclick="params.funcs.search()"> Search <span class='icon'/> <i
+            class="fa fa-search" aria-hidden="true"></i></span></button>
+
+    <button class=" btn-action btn-back" onclick="params.funcs.back()"> Back <span class='icon'/> <i
+            class="fa fa-arrow-left" aria-hidden="true"></i></span></button>
+
+    <div class="department-information">
+        <div class="dept-name">
+            dept name
+        </div>
+        <div class="dept-emp-count">
+            dept description test, this is department description
+        </div>
+        <div class="dept-description">
+            dept description test, this is department description
+        </div>
+    </div>
+
+    <div class="user-search-box">
+        <div class="input-box">
+            <div class="close-button-wrapper"><i onclick="params.funcs.closeSearchBox()" class="fa fa-times"
+                                                 aria-hidden="true"></i></div>
+            <div class="input-wrapper">
+                <input type="text" class="search-input" placeholder="Search"/>
+                <div class="input-bottom-placeholder">By Firstname, Lastname, Tags</div>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="result-box">
+            <div class="result-header"> RESULTS</div>
+            <div class="result-list">
+
+
+                <div class="buffer"></div>
+            </div>
+        </div>
+    </div>
+
+    <button id='saveButton'>Export my D3 visualization to PNG</button>
+    <div id="svgChart"></div>
+    <!--
+     <button class="btn btn-expand" onclick="params.funcs.expandAll()">Expand All</button>
+  -->
+</div>
+
+
+</body>
+
+</html>

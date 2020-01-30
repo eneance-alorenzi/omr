@@ -1,0 +1,14 @@
+{
+  "name": "@bumbeishvili/d3-v5-organization-chart",
+  "main": "faa112f2b876e54a@1585.js",
+  "version": "1585.0.0",
+  "homepage": "https://observablehq.com/@bumbeishvili/d3-v5-organization-chart",
+  "author": {
+    "name": "David  B.",
+    "url": "https://observablehq.com/@bumbeishvili"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
