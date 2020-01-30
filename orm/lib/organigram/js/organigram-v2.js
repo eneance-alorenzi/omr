@@ -1228,18 +1228,26 @@ class TreeChart {
                 const normalMarginLeft = 20;
                 const contentMarginLeft = width / 2 + 25;
 
+                const colorCardBackground = 'white';
+                const colorRed = 'red';
+                const colorYellow = '#FFBF00';
+                const colorName = '#519ED4';
+                const colorBorderGray = 'lightgray';
+                const colorBorderBlue = '#2C578C';
+                const colorBackgroundGrey = 'lightgray';
+                const colorBackgroundBlue = '#3270E1';
+
                 let template = `<div style="margin-left:0; margin-top:0; font-size:16px;">`;
                 switch (attrs.template) {
                     case 'simple':
                         height = 100;
                         template += `
-                                 <div style="">
-                                    <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; color: blue;">${d.positionName}</div>
-                                    <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:16px;">${d.name}</div>
-                                    <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:16px;">${d.jobTenure}<span style="font-weight: bold; color: red;">!</span></div>
-                                 </div>
+                            <div style="border: 2px solid ${colorBorderBlue}">
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; color: blue;">${d.position}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.firstname} ${d.lastname}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
                             </div>
-                            `;
+                        `;
                         break;
                     case 'omr' :
                     case 'full' :
@@ -1263,12 +1271,12 @@ class TreeChart {
                         height = Math.round(250 /*+ 50 * Math.random() * 2*/);
                         if (d.isFuturA) {
                             template += `
-                                <div style="border: 4px dashed yellow; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
+                                <div style="border: 4px dashed ${colorYellow}; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
                         }
                         template += `
                             <div style="padding: 10px 10px 10px 60px; ${d._borderPosition}">
                                 <div style="font-size:20px;">${d.positionName}</div>
-                                <div style="color: ${d._colorName};">${d.name}</div>
+                                <div style="color: ${d._colorName};">${d.firstname} ${d.lastname}</div>
                                 <div style="">Job tenure ${d._highRetentionText} ${d._criticalText}`;
                         template += `
                                 </div>
@@ -1276,11 +1284,6 @@ class TreeChart {
                         if (d.isFuturA) {
                             template += `</div>`;
                         }
-                        // fond : white
-                        //rouge : r255 v0 b0
-                        //jaune : r255 v191 b0
-                        //blue nom prenom : r81 v158 b212
-                        //blue contour : r44 v87 b140
                         template += `
                             <div style="padding: 10px; border: 2px solid grey; background: lightgray;">
                                 <div style="">Name surname of potential lead successor</div>
@@ -1293,7 +1296,6 @@ class TreeChart {
                             </div>`;
                             if (attrs.template === 'full') {
                                 height += 50;
-                                // blue : r50 v112 b225
                                 template += `
                                 <div style="padding: 10px; font-size:16px; background: dodgerblue; height: 50px; overflow: auto;">
                                     <div style="">Potential next step for talent + readiness</div>
@@ -1303,6 +1305,27 @@ class TreeChart {
                                     <div style="">Potential next step for talent + readiness</div>
                                 </div>`;
                             }
+                        break;
+                    case 'next':
+                        height = 300;
+                        template += `
+                            <div style="border: 2px solid ${colorBackgroundBlue}">
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; color: blue;">${d.position}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.firstname} ${d.lastname}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
+                            </div>
+                            <div style="background: ${colorBackgroundBlue}">`;
+                        if (d.potentialNextStep) {
+                            d.potentialNextStep.forEach(ns => {
+                                template += `<div>${ns.position} ${ns.readiness}</div>`;
+                            });
+                        }
+                        template += `
+                            </div>
+                        `;
+
+
+
                         break;
                     default:
                         template = `UNKNOWN TEMPLATE : ${attrs.template}`;

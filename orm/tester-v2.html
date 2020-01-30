@@ -27,13 +27,12 @@
     //d3.json('https://www.mocky.io/v2/5e33058a32000078c894d369', {mode: 'no-cors'})
     //d3.json('/Users/arnaudlorenzi/eneance/git/lvmh/orm/orm/app/lib/organigram/data.json', {mode: 'no-cors'})
     //d3.json('https://relais.sephora.fr/pr/detailPointsRelais?id=0908U&type=shipChronoRelais&country=FR&language=fr', {mode: 'no-cors'})
-    d3.json('https://raw.githubusercontent.com/eneance-alorenzi/omr/master/orm/data.json', {mode: 'no-cors'})
+    d3.json('https://raw.githubusercontent.com/eneance-alorenzi/omr/master/orm/data.json')
         .then(data => {
-
             chart = new TreeChart()
                 .container('.chart-container')
                 //.data(data)
-                .template("full")
+                .template("next")
                 .rawData(data)
                 .flattenData()
                 .svgWidth(window.innerWidth)
