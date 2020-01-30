@@ -5,8 +5,8 @@
   "jobTenure": "42085",
   "position": "Store Manager @ Panama",
   "manager": 1029346,
-  "keyPosition": null,
-  "keyContributor": null,
+  "keyPosition": "GKP",
+  "keyContributor": "CKC",
   "retentionRisk": false,
   "futura": false,
   "criticalExpert": false,
@@ -133,13 +133,12 @@
       "jobtenure": "42720",
       "position": "Store Manager @ St. Barths-LV",
       "manager": 1029346,
-      "keyposition": null,
-      "keycontributor": null,
+      "keyPosition": "CKP",
+      "keyContributor": "GKC",
       "retentionrisk": false,
       "futura": false,
       "criticalexpert": false,
       "children": [
-
         {
           "id": 1029931,
           "firstname": "C",
@@ -357,8 +356,8 @@
       "jobtenure": "43466",
       "position": "VM Director",
       "manager": 1029346,
-      "keyposition": null,
-      "keycontributor": null,
+      "keyPosition": "dd",
+      "keyContributor": "CKC",
       "retentionrisk": false,
       "futura": false,
       "criticalexpert": false

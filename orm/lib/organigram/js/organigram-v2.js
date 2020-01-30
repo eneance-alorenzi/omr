@@ -1214,8 +1214,10 @@ class TreeChart {
                     id: d.id,
                     parentId: d.parent && d.parent.id
                 })).map(d => {
-                let width = Math.round(Math.random() * 50 + 300);
+
+                let width = 500; //Math.round(Math.random() * 50 + 300);
                 let height = Math.round(Math.random() * 20 + 130 + 100) + 50 * Math.round(Math.random() * 2);
+
                 const cornerShape = 'ROUNDED'; //['ORIGINAL', 'ROUNDED', 'CIRCLE'][Math.round(Math.random() * 2)];
                 const nodeImageWidth = 100;
                 const nodeImageHeight = 100;
@@ -1237,39 +1239,34 @@ class TreeChart {
                 const colorBackgroundGrey = 'lightgray';
                 const colorBackgroundBlue = '#3270E1';
 
-                let template = `<div style="margin-left:0; margin-top:0; font-size:16px;">`;
+                let template = `<div style="margin-left:0; margin-top:0; font-size:16px; color: black; white-space: nowrap;">`;
                 switch (attrs.template) {
                     case 'simple':
-                        height = 100;
+                        height = 123;
                         template += `
-                            <div style="border: 2px solid ${colorBorderBlue}">
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; color: blue;">${d.position}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.firstname} ${d.lastname}</div>
+                            <div style="padding: 10px 10px 20px; border: 4px solid ${colorBackgroundBlue};">
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; font-weight: bold;">${d.position}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
                                 <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
                             </div>
                         `;
                         break;
                     case 'omr' :
                     case 'full' :
-
-                        d.isFuturA = Math.random() >= 0.5;
-                        d.isCriticalExpert = Math.random() >= 0.5;
-                        d.isHighRetentionRisk = Math.random() >= 0.5;
-                        d.isGroupKeyPosition = Math.random() >= 0.5;
-                        d.isGroupKeyContributor = Math.random() >= 0.5;
-                        d.isCompanyKeyPosition = Math.random() >= 0.5;
-                        d.isCompanyKeyContributor = Math.random() >= 0.5;
+                        d.isGroupKeyPosition = d.keyPosition === 'GKP';
+                        d.isGroupKeyContributor = d.keyContributor === 'GKC';
+                        d.isCompanyKeyPosition = d.keyPosition === 'CKP';
+                        d.isCompanyKeyContributor = d.keyContributor === 'CKC';
 
                         /// max 8 potential successors
 
-
-                        d._criticalText = d.isCriticalExpert ? '<span style="color: blue; font-weight: bolder; font-size: 24px;">*</span>' : '';
-                        d._highRetentionText = d.isHighRetentionRisk ? '<span style="color: red; font-weight: bold">!</span>' : '';
+                        d._criticalText = d.criticalExpert ? '<span style="color: blue; font-weight: bolder; font-size: 24px;">*</span>' : '';
+                        d._highRetentionText = d.retentionRisk ? '<span style="color: red; font-weight: bold">!</span>' : '';
                         d._borderPosition = d.isGroupKeyPosition ? `border: 4px solid red; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : (d.isCompanyKeyPosition ? `border: 4px solid blue; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : '');
                         d._colorName = d.isGroupKeyContributor ? 'red' : (d.isCompanyKeyContributor ? 'blue' : 'white');
 
                         height = Math.round(250 /*+ 50 * Math.random() * 2*/);
-                        if (d.isFuturA) {
+                        if (d.futura) {
                             template += `
                                 <div style="border: 4px dashed ${colorYellow}; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
                         }
@@ -1281,7 +1278,7 @@ class TreeChart {
                         template += `
                                 </div>
                             </div>`;
-                        if (d.isFuturA) {
+                        if (d.futura) {
                             template += `</div>`;
                         }
                         template += `
@@ -1307,14 +1304,14 @@ class TreeChart {
                             }
                         break;
                     case 'next':
-                        height = 300;
+                        height = 109 + 30 + 18 * (d.potentialNextStep ? d.potentialNextStep.length : 0);
                         template += `
-                            <div style="border: 2px solid ${colorBackgroundBlue}">
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; color: blue;">${d.position}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.firstname} ${d.lastname}</div>
+                            <div style="padding: 10px; border: 4px solid ${colorBackgroundBlue}; border-bottom: none;">
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; font-weight: bold;">${d.position}</div>
+                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
                                 <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
                             </div>
-                            <div style="background: ${colorBackgroundBlue}">`;
+                            <div style="padding: 10px 10px 20px 10px; color: white; background: ${colorBackgroundBlue}">`;
                         if (d.potentialNextStep) {
                             d.potentialNextStep.forEach(ns => {
                                 template += `<div>${ns.position} ${ns.readiness}</div>`;
@@ -1323,9 +1320,6 @@ class TreeChart {
                         template += `
                             </div>
                         `;
-
-
-
                         break;
                     default:
                         template = `UNKNOWN TEMPLATE : ${attrs.template}`;
@@ -1347,9 +1341,9 @@ class TreeChart {
                         alpha: 1,
                     },
                     backgroundColor: {
-                        red: 0,
-                        green: 81,
-                        blue: 90,
+                        red: 255, //0,
+                        green: 255, //81,
+                        blue: 255, //90,
                         alpha: 1,
                     },
                     nodeImage: {
