@@ -8,7 +8,7 @@
   "keyPosition": "GKP",
   "keyContributor": "CKC",
   "retentionRisk": false,
-  "futura": false,
+  "futura": true,
   "criticalExpert": false,
   "leadSuccessor": {
     "id": 1017032,
@@ -76,7 +76,7 @@
       "keyposition": null,
       "keycontributor": null,
       "retentionrisk": false,
-      "futura": false,
+      "futura": true,
       "criticalexpert": false,
       "leadSuccessor": {
         "id": 1017032,
@@ -135,9 +135,9 @@
       "manager": 1029346,
       "keyPosition": "CKP",
       "keyContributor": "GKC",
-      "retentionrisk": false,
+      "retentionrisk": true,
       "futura": false,
-      "criticalexpert": false,
+      "criticalexpert": true,
       "children": [
         {
           "id": 1029931,
@@ -265,9 +265,9 @@
           "manager": 1029346,
           "keyposition": null,
           "keycontributor": null,
-          "retentionrisk": false,
-          "futura": false,
-          "criticalexpert": false
+          "retentionrisk": true,
+          "futura": true,
+          "criticalexpert": true
         },
         {
           "id": 6001040,
@@ -358,9 +358,9 @@
       "manager": 1029346,
       "keyPosition": "dd",
       "keyContributor": "CKC",
-      "retentionrisk": false,
-      "futura": false,
-      "criticalexpert": false
+      "retentionrisk": true,
+      "futura": true,
+      "criticalexpert": true
     },
     {
       "id": 1029346,
@@ -371,7 +371,7 @@
       "manager": 1029346,
       "keyposition": null,
       "keycontributor": null,
-      "retentionrisk": false,
+      "retentionrisk": true,
       "futura": false,
       "criticalexpert": false
     },
@@ -386,7 +386,7 @@
       "keycontributor": null,
       "retentionrisk": false,
       "futura": false,
-      "criticalexpert": false
+      "criticalexpert": true
     }
   ]
 }

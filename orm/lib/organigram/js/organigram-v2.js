@@ -1234,7 +1234,7 @@ class TreeChart {
                 const colorRed = 'red';
                 const colorYellow = '#FFBF00';
                 const colorName = '#519ED4';
-                const colorBorderGray = 'lightgray';
+                const colorBorderGray = 'darkgray';
                 const colorBorderBlue = '#2C578C';
                 const colorBackgroundGrey = 'lightgray';
                 const colorBackgroundBlue = '#3270E1';
@@ -1242,12 +1242,12 @@ class TreeChart {
                 let template = `<div style="margin-left:0; margin-top:0; font-size:16px; color: black; white-space: nowrap;">`;
                 switch (attrs.template) {
                     case 'simple':
-                        height = 123;
+                        height = 110;
                         template += `
-                            <div style="padding: 10px 10px 20px; border: 4px solid ${colorBackgroundBlue};">
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; font-weight: bold;">${d.position}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
+                            <div style="padding: 10px 10px 20px ${titleMarginLeft}px; border: 4px solid ${colorBackgroundBlue};">
+                                <div style="font-size:20px; font-weight: bold;">${d.position}</div>
+                                <div style="margin-top:5px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
+                                <div style="margin-top:5px;">${d.jobTenure}</div>
                             </div>
                         `;
                         break;
@@ -1265,51 +1265,58 @@ class TreeChart {
                         d._borderPosition = d.isGroupKeyPosition ? `border: 4px solid red; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : (d.isCompanyKeyPosition ? `border: 4px solid blue; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : '');
                         d._colorName = d.isGroupKeyContributor ? 'red' : (d.isCompanyKeyContributor ? 'blue' : 'white');
 
-                        height = Math.round(250 /*+ 50 * Math.random() * 2*/);
+                        height = 92
+                            + (d.futura ? 8 : 0)
+                            + (d.isGroupKeyPosition || d.isCompanyKeyPosition ? 8 : 0)
+                            + (d.leadSuccessor ? 42 : 0)
+                            + (d.potentialSuccessor ? 36 + 18 * d.potentialSuccessor.length: 0);
                         if (d.futura) {
-                            template += `
-                                <div style="border: 4px dashed ${colorYellow}; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
+                            template += `<div style="border: 4px dashed ${colorYellow}; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
                         }
                         template += `
-                            <div style="padding: 10px 10px 10px 60px; ${d._borderPosition}">
-                                <div style="font-size:20px;">${d.positionName}</div>
-                                <div style="color: ${d._colorName};">${d.firstname} ${d.lastname}</div>
-                                <div style="">Job tenure ${d._highRetentionText} ${d._criticalText}`;
-                        template += `
-                                </div>
+                            <div style="padding: 10px 10px 10px ${titleMarginLeft}px; ${d._borderPosition}">
+                                <div style="font-size:20px; font-weight: bold;">${d.position}</div>
+                                <div style="margin-top:5px; font-size:18px; font-weight: bold; color: ${d._colorName};">${d.firstname} ${d.lastname}</div>
+                                <div style="margin-top:5px; ">${d.jobTenure} ${d._highRetentionText} ${d._criticalText}</div>
                             </div>`;
                         if (d.futura) {
                             template += `</div>`;
                         }
-                        template += `
-                            <div style="padding: 10px; border: 2px solid grey; background: lightgray;">
-                                <div style="">Name surname of potential lead successor</div>
-                            </div>
-                            <div style="">
-                                <ul>
-                                    <li>Name Surname & readiness 1</li>
-                                    <li>Name Surname & readiness 2</li>
-                                </ul>
+                        if (d.leadSuccessor) {
+                            template += `
+                            <div style="padding: 10px; border: 2px solid ${colorBorderGray}; background: ${colorBackgroundGrey};">
+                                <div style="">${d.leadSuccessor.firstname} ${d.leadSuccessor.lastname}</div>
                             </div>`;
-                            if (attrs.template === 'full') {
-                                height += 50;
-                                template += `
-                                <div style="padding: 10px; font-size:16px; background: dodgerblue; height: 50px; overflow: auto;">
-                                    <div style="">Potential next step for talent + readiness</div>
-                                    <div style="">Potential next step for talent + readiness</div>
-                                    <div style="">Potential next step for talent + readiness</div>
-                                    <div style="">Potential next step for talent + readiness</div>
-                                    <div style="">Potential next step for talent + readiness</div>
+                        }
+                        if (d.potentialSuccessor) {
+                            template += `
+                                <div style="border: 2px solid ${colorBorderGray};">
+                                    <ul>`;
+                            d.potentialSuccessor.forEach(ps => {
+                                template += `<li>${ps.firstname} ${ps.lastname} ${ps.readiness}</li>`;
+                            });
+                            template += `
+                                    </ul>
                                 </div>`;
+                        }
+                        if (attrs.template === 'full') {
+                            height += 50;
+                            template += `<div style="padding: 10px 10px 20px 10px; color: white; background: ${colorBackgroundBlue}">`;
+                            if (d.potentialNextStep) {
+                                d.potentialNextStep.forEach(ns => {
+                                    template += `<div>${ns.position} ${ns.readiness}</div>`;
+                                });
                             }
+                            template += ` </div> `;
+                        }
                         break;
                     case 'next':
-                        height = 109 + 30 + 18 * (d.potentialNextStep ? d.potentialNextStep.length : 0);
+                        height = 97 + 30 + 18 * (d.potentialNextStep ? d.potentialNextStep.length : 0);
                         template += `
-                            <div style="padding: 10px; border: 4px solid ${colorBackgroundBlue}; border-bottom: none;">
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:3px; font-size:20px; font-weight: bold;">${d.position}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
-                                <div style="margin-left:${titleMarginLeft}px; margin-top:10px;">${d.jobTenure}</div>
+                            <div style="padding: 10px 10px 10px ${titleMarginLeft}px; border: 4px solid ${colorBackgroundBlue}; border-bottom: none;">
+                                <div style="font-size:20px; font-weight: bold;">${d.position}</div>
+                                <div style="margin-top:5px; font-size:18px; font-weight: bold;">${d.firstname} ${d.lastname}</div>
+                                <div style="margin-top:5px;">${d.jobTenure}</div>
                             </div>
                             <div style="padding: 10px 10px 20px 10px; color: white; background: ${colorBackgroundBlue}">`;
                         if (d.potentialNextStep) {
@@ -1317,9 +1324,7 @@ class TreeChart {
                                 template += `<div>${ns.position} ${ns.readiness}</div>`;
                             });
                         }
-                        template += `
-                            </div>
-                        `;
+                        template += ` </div> `;
                         break;
                     default:
                         template = `UNKNOWN TEMPLATE : ${attrs.template}`;
