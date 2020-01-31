@@ -25,8 +25,10 @@ class TreeChart {
             strokeWidth: 3,
             dropShadowId: null,
             initialZoom: 1,
+            imagePath: '.',
             //onNodeClick: d => d,
             onNodeClick: (nodeId, node, chart) => {},
+            onNodeUpdate: (data, nodeId, chart) => {},
         };
 
         this.getChartState = () => attrs;
@@ -359,8 +361,20 @@ class TreeChart {
         return this;
     }
 
-    updateNodeData(rawDataWithId) {
+    updateNodeData(rawData) {
+        const attrs = this.getChartState();
+        // locate node
+        const oldRawData = attrs.rawData.filter(({
+                                                data
+                                            }) => data.id === rawData.id)[0];
+        // update data
+        const newRawData = {...oldRawData, ...rawData};
 
+        // Redraw graph
+        //this.update(attrs.root);
+        // Update state of nodes and redraw graph
+        this.updateNodesState();
+        return this;
     }
 
     // This function can be invoked via chart.removeNode API, and it removes node from tree at runtime
@@ -370,14 +384,13 @@ class TreeChart {
             data
         }) => data.nodeId === nodeId)[0];
 
-
         // Remove all node childs
         if (node) {
             // Retrieve all children nodes ids (including current node itself)
             const nodeChildrenIds = this.getNodeChildrenIds(node, []);
 
             // Filter out retrieved nodes and reassign data
-            attrs.data = attrs.data.filter(d => !nodeChildrenIds.includes(d.nodeId))
+            attrs.data = attrs.data.filter(d => !nodeChildrenIds.includes(d.nodeId));
 
             const updateNodesState = this.updateNodesState.bind(this);
             // Update state of nodes and redraw graph
@@ -612,79 +625,6 @@ class TreeChart {
                 _children
             }) => _children ? "lightsteelblue" : "#fff");
 
-        /*
-         * Start : footer (stats on descendants)
-         */
-        // // Add node icon image inside node
-        // nodeEnter
-        //     .patternify({
-        //         tag: 'image',
-        //         selector: 'node-icon-image',
-        //         data: d => [d]
-        //     })
-        //     .attr('width', ({
-        //         data
-        //     }) => data.nodeIcon.size)
-        //     .attr('height', ({
-        //         data
-        //     }) => data.nodeIcon.size)
-        //     .attr("xlink:href", ({
-        //         data
-        //     }) => data.nodeIcon.icon)
-        //     .attr('x', ({
-        //         width
-        //     }) => -width / 2 + 5)
-        //     .attr('y', ({
-        //         height,
-        //         data
-        //     }) => height / 2 - data.nodeIcon.size - 5);
-        //
-        // // Add total descendants text
-        // nodeEnter
-        //     .patternify({
-        //         tag: 'text',
-        //         selector: 'node-icon-text-total',
-        //         data: d => [d]
-        //     })
-        //     .text('test')
-        //     .attr('x', ({
-        //         width
-        //     }) => -width / 2 + 7)
-        //     .attr('y', ({
-        //         height,
-        //         data
-        //     }) => height / 2 - data.nodeIcon.size - 5)
-        //     .text(({
-        //         data
-        //     }) => `${data.totalSubordinates} Subordinates`)
-        //     .attr('fill', attrs.nodeTextFill)
-        //     .attr('font-weight', 'bold')
-        //
-        // // Add direct descendants text
-        // nodeEnter
-        //     .patternify({
-        //         tag: 'text',
-        //         selector: 'node-icon-text-direct',
-        //         data: d => [d]
-        //     })
-        //     .text('test')
-        //     .attr('x', ({
-        //         width,
-        //         data
-        //     }) => -width / 2 + 10 + data.nodeIcon.size)
-        //     .attr('y', ({
-        //         height
-        //     }) => height / 2 - 10)
-        //     .text(({
-        //         data
-        //     }) => `${data.directSubordinates} Direct `)
-        //     .attr('fill', attrs.nodeTextFill)
-        //     .attr('font-weight', 'bold')
-
-        /*
-         * End : footer (stats on descendants)
-         */
-
         // Node update styles
         const nodeUpdate = nodeEnter.merge(nodesSelection).style('font', '12px sans-serif');
 
@@ -779,7 +719,56 @@ class TreeChart {
             .text('X')
             .attr('y', this.isEdge() ? 10 : 0);
         /*
-         * End : expand/collapse button
+         * End : close button
+         */
+
+        /*
+         * Start : update button
+         */
+        const nodeUpdateButtonGroups = nodeEnter.patternify({
+            tag: 'g',
+            selector: 'node-button-update',
+            data: d => [d]
+        })
+            .on('click', d => this.onButtonUpdateClick(d));
+
+        // Add expand collapse button circle
+        nodeUpdateButtonGroups.patternify({
+            tag: 'circle',
+            selector: 'node-button-update-circle',
+            data: d => [d]
+        });
+
+        // Add button text
+        nodeUpdateButtonGroups.patternify({
+            tag: 'text',
+            selector: 'node-button-update-text',
+            data: d => [d]
+        })
+            .attr('pointer-events', 'none');
+
+        // Move node button group to the desired position
+        nodeUpdate.select('.node-button-update')
+            .attr('transform', ({data}) => `translate(${data.width / 2 - 40}, -${data.height / 2})`)
+            .attr('opacity', 1);
+
+        // Restyle node button circle
+        nodeUpdate.select('.node-button-update-circle')
+            .attr('r', 16)
+            .attr('stroke-width', ({data}) => data.borderWidth || attrs.strokeWidth)
+            .attr('fill', attrs.backgroundColor)
+            .attr('stroke', ({borderColor}) => borderColor);
+
+        // Restyle button texts
+        nodeUpdate.select('.node-button-update-text')
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'middle')
+            .attr('fill', attrs.defaultTextFill)
+            .attr('font-size', 40)
+            .text('U')
+            .attr('y', this.isEdge() ? 10 : 0);
+        /*
+         * End : update button
          */
 
         /*
@@ -990,6 +979,15 @@ class TreeChart {
 
     onButtonCloseClick(d) {
         this.removeNode(d.data.nodeId);
+    }
+
+    onButtonUpdateClick(d) {
+        const attrs = this.getChartState();
+        // Retrieve node by node Id
+        // const rawData = attrs.rawData.filter(({
+        //                                         data
+        //                                     }) => data.nodeId === d.data.nodeId)[0];
+        attrs.onNodeUpdate(d.data.rawData, d.data.nodeId, this);
     }
 
     // Toggle children on click.
@@ -1206,13 +1204,17 @@ class TreeChart {
 
     flattenData() {
         const attrs = this.getChartState();
-        attrs.data=
-            d3.hierarchy(attrs.rawData)
+        attrs.data = d3.hierarchy(attrs.rawData)
                 .descendants()
-                .map((d, i) => Object.assign(d, {id: "node-"+(i) /*DOM.uid().id*/}))
+                .map((d, i) => Object.assign(d, {
+                    id: "node-" + i /*DOM.uid().id*/,
+                    nodeId: "node-" + i
+                }))
                 .map(d => Object.assign(d.data, {
                     id: d.id,
-                    parentId: d.parent && d.parent.id
+                    nodeId: d.nodeId,
+                    parentId: d.parent && d.parent.id,
+                    parentNodeId: d.parent && d.parent.nodeId
                 })).map(d => {
 
                 let width = 500; //Math.round(Math.random() * 50 + 300);
@@ -1352,7 +1354,7 @@ class TreeChart {
                         alpha: 1,
                     },
                     nodeImage: {
-                        url: d.imageUrl,
+                        url: (d.avatar ? d.avatar : attrs.imagePath + '/default-avatar.jpg'),
                         width: nodeImageWidth,
                         height: nodeImageHeight,
                         centerTopDistance: centerTopDistance,
@@ -1411,7 +1413,8 @@ class TreeChart {
                     },
                     connectorLineWidth: 5,
                     dashArray: '',
-                    expanded: expanded
+                    expanded: expanded,
+                    rawData : d
                 }
             });
         return this;

@@ -27,14 +27,13 @@
     //d3.json('https://www.mocky.io/v2/5e33058a32000078c894d369', {mode: 'no-cors'})
     //d3.json('/Users/arnaudlorenzi/eneance/git/lvmh/orm/orm/app/lib/organigram/data.json', {mode: 'no-cors'})
     //d3.json('https://relais.sephora.fr/pr/detailPointsRelais?id=0908U&type=shipChronoRelais&country=FR&language=fr', {mode: 'no-cors'})
-    d3.json('https://raw.githubusercontent.com/eneance-alorenzi/omr/master/orm/data.json?d=e')
+    d3.json('https://raw.githubusercontent.com/eneance-alorenzi/omr/a/orm/data.json')
         .then(data => {
             chart = new TreeChart()
                 .container('.chart-container')
                 //.data(data)
                 .template("omr")
-                .rawData(data)
-                .flattenData()
+                .imagePath('./lib/organigram/image')
                 .svgWidth(window.innerWidth)
                 .svgHeight(window.innerWidth)
                 .initialZoom(0.6)
@@ -49,6 +48,14 @@
                     //chart.setExpanded(nodeId);
                     //chart.removeNode(nodeId);
                 })
+                .onNodeUpdate((data, nodeId, chart) => {
+                    console.info("ask for node update " + nodeId);
+                    console.dir(data);
+                    data.firstname += " up";
+                    chart.updateNodeData(data);
+                })
+                .rawData(data)
+                .flattenData()
                 .render()
         });
 

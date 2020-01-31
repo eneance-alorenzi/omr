@@ -1,5 +1,6 @@
 {
   "id": 1029346,
+  "avatar": "https://raw.githubusercontent.com/bumbeishvili/Assets/master/Projects/D3/Organization%20Chart/cto.jpg",
   "firstname": "John",
   "lastname": "Gabarit.",
   "jobTenure": "42085",
@@ -68,6 +69,7 @@
   "children": [
     {
       "id": 1017032,
+      "avatar": null,
       "firstname": "C",
       "lastname": "L",
       "jobtenure": "40352",
@@ -128,6 +130,7 @@
     },
     {
       "id": 1017044,
+      "avatar": "https://raw.githubusercontent.com/bumbeishvili/Assets/master/Projects/D3/Organization%20Chart/general.jpg",
       "firstname": "L",
       "lastname": "A",
       "jobtenure": "42720",
