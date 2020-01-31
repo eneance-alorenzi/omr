@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <link rel='stylesheet prefetch' href='./lib/organigram/css/organigram.css'>
+
+    <script src="https://cdn.rawgit.com/eligrey/canvas-toBlob.js/f1a01896135ab378aa5c0118eadd81da55e698d8/canvas-toBlob.js"></script>
+    <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src='lib/organigram/js/organigram.js'></script>
+
+</head>
+
+<body>
+
+<div class="chart-container" style=" padding-top:10px; width:1200px; height:1200px "> </div>
+
+<script>
+
+    data = {
+        "id": 1029346,
+        "avatar": "https://raw.githubusercontent.com/bumbeishvili/Assets/master/Projects/D3/Organization%20Chart/cto.jpg",
+        "firstName": "John",
+        "lastName": "Gabarit.",
+        "jobTenure": "42085",
+        "position": "Store Manager @ Panama",
+        "manager": 1029346,
+        "keyPosition": "group",
+        "keyContributor": "company",
+        "retentionRisk": true,
+        "futurA": true,
+        "criticalExpert": true,
+        "leadSuccessor": {
+            "id": 1017032,
+            "firstName": "C",
+            "lastName": "L",
+            "jobTenure": "40352",
+            "position": "Store Manager Santo Domingo",
+            "manager": 1029346,
+            "keyPosition": null,
+            "keyContributor": null,
+            "retentionRisk": false,
+            "futurA": false,
+            "criticalExpert": false
+        },
+        "potentialSuccessor": [
+            {
+                "id": 1017032,
+                "firstName": "C",
+                "lastName": "L",
+                "jobTenure": "40352",
+                "position": "Store Manager Santo Domingo",
+                "manager": 1029346,
+                "keyposition": null,
+                "keycontributor": null,
+                "retentionrisk": false,
+                "futurA": false,
+                "criticalExpert": false
+            },
+            {
+                "id": 1017032,
+                "firstName": "C",
+                "lastName": "L",
+                "jobTenure": "40352",
+                "position": "Store Manager Santo Domingo",
+                "manager": 1029346,
+                "keyposition": null,
+                "keycontributor": null,
+                "retentionrisk": false,
+                "futurA": false,
+                "criticalExpert": false
+            }
+        ],
+        "potentialNextStep": [
+            {
+                "position": "aaa",
+                "readiness": "ready !"
+            },
+            {
+                "position": "ddd ff gg gg",
+                "readiness": "not ready !"
+            },
+            {
+                "position": "dd ee @ dsfsd qsdf qs",
+                "readiness": "ready !"
+            }
+        ],
+        "children": [
+            {
+                "id": 1017032,
+                "avatar": null,
+                "firstName": "C",
+                "lastName": "L",
+                "jobTenure": "40352",
+                "position": "Store Manager Santo Domingo",
+                "manager": 1029346,
+                "keyposition": null,
+                "keycontributor": null,
+                "retentionrisk": false,
+                "futurA": true,
+                "criticalExpert": true,
+                "leadSuccessor": {
+                    "id": 1017032,
+                    "firstName": "C",
+                    "lastName": "L",
+                    "jobTenure": "40352",
+                    "position": "Store Manager Santo Domingo",
+                    "manager": 1029346,
+                    "keyPosition": null,
+                    "keyContributor": null,
+                    "retentionRisk": false,
+                    "futurA": false,
+                    "criticalExpert": false
+                },
+                "potentialuccessor": [
+                    {
+                        "id": 1017032,
+                        "firstName": "C",
+                        "lastName": "L",
+                        "jobTenure": "40352",
+                        "position": "Store Manager Santo Domingo",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1017032,
+                        "firstName": "C",
+                        "lastName": "L",
+                        "jobTenure": "40352",
+                        "position": "Store Manager Santo Domingo",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    }
+                ],
+                "potentialNextStep": [
+                    {
+                        "position": "ddd",
+                        "readiness": "ready !"
+                    }
+                ]
+            },
+            {
+                "id": 1017044,
+                "avatar": "https://raw.githubusercontent.com/bumbeishvili/Assets/master/Projects/D3/Organization%20Chart/general.jpg",
+                "firstName": "L",
+                "lastName": "A",
+                "jobTenure": "42720",
+                "position": "Store Manager @ St. Barths-LV",
+                "manager": 1029346,
+                "keyPosition": "company",
+                "keyContributor": "group",
+                "retentionrisk": true,
+                "futurA": false,
+                "criticalExpert": true,
+                "children": [
+                    {
+                        "id": 1029931,
+                        "firstName": "C",
+                        "lastName": "F",
+                        "jobTenure": "41640",
+                        "position": "Store Manager @ Puerto Rico-LV ",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1047509,
+                        "firstName": "C",
+                        "lastName": "G",
+                        "jobTenure": "41553",
+                        "position": "Store Manager Monterrey",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1047514,
+                        "firstName": "R",
+                        "lastName": "S",
+                        "jobTenure": "43709",
+                        "position": "Merchandising Manager",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1061791,
+                        "firstName": "J",
+                        "lastName": "R",
+                        "jobTenure": "42370",
+                        "position": "Store Manager Aruba",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1128463,
+                        "firstName": "CL",
+                        "lastName": "P",
+                        "jobTenure": "43221",
+                        "position": "Human Resources Director",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1132382,
+                        "firstName": "A",
+                        "lastName": "D",
+                        "jobTenure": "43617",
+                        "position": "Finance Manager Mexico",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 1509617,
+                        "firstName": "F",
+                        "lastName": "C",
+                        "jobTenure": "43709",
+                        "position": "Store Manager Cancun",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6000059,
+                        "firstName": "JO",
+                        "lastName": "G",
+                        "jobTenure": "43647",
+                        "position": "Store Manager",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6000173,
+                        "firstName": "M",
+                        "lastName": "G",
+                        "jobTenure": "43466",
+                        "position": "Store Manager Guadalajara",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6000398,
+                        "firstName": "E",
+                        "lastName": "B",
+                        "jobTenure": "42994",
+                        "position": "Team Manager @ Masaryk",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": true,
+                        "futurA": true,
+                        "criticalExpert": true
+                    },
+                    {
+                        "id": 6001040,
+                        "firstName": "A",
+                        "lastName": "P",
+                        "jobTenure": "43110",
+                        "position": "Team Manager @ Masaryk",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6005616,
+                        "firstName": "G",
+                        "lastName": "G",
+                        "jobTenure": "43521",
+                        "position": "Store Manager Santa Fe",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6008822,
+                        "firstName": "MA",
+                        "lastName": "F",
+                        "jobTenure": "43617",
+                        "position": "Team Manager",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6009347,
+                        "firstName": "NI",
+                        "lastName": "T",
+                        "jobTenure": "43693",
+                        "position": "Ops Manager",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 6009874,
+                        "firstName": "ZU",
+                        "lastName": "V",
+                        "jobTenure": "43725",
+                        "position": "Team Manager @ Polanco-LV",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    },
+                    {
+                        "id": 26194,
+                        "firstName": "H",
+                        "lastName": "P",
+                        "jobTenure": "42380",
+                        "position": "Public Relations Director",
+                        "manager": 1029346,
+                        "keyposition": null,
+                        "keycontributor": null,
+                        "retentionrisk": false,
+                        "futurA": false,
+                        "criticalExpert": false
+                    }
+                ]
+            },
+            {
+                "id": 1017921,
+                "firstName": "PA",
+                "lastName": "C",
+                "jobTenure": "43466",
+                "position": "VM Director",
+                "manager": 1029346,
+                "keyPosition": "dd",
+                "keyContributor": "company",
+                "retentionrisk": true,
+                "futurA": true,
+                "criticalExpert": true
+            },
+            {
+                "id": 1029346,
+                "firstName": "J",
+                "lastName": "G",
+                "jobTenure": "42085",
+                "position": "Store Manager @ Panama",
+                "manager": 1029346,
+                "keyposition": null,
+                "keycontributor": null,
+                "retentionrisk": true,
+                "futurA": false,
+                "criticalExpert": false
+            },
+            {
+                "id": 1029349,
+                "firstName": "H",
+                "lastName": "H",
+                "jobTenure": "43472",
+                "position": "RETAIL MARKETING DIRECTOR",
+                "manager": 1029346,
+                "keyposition": null,
+                "keycontributor": null,
+                "retentionrisk": false,
+                "futurA": false,
+                "criticalExpert": true
+            }
+        ]
+    };
+
+
+    chart = new TreeChart()
+        .container('.chart-container')
+        //.data(data)
+        .template("omr")
+        .imagePath('./lib/organigram/image')
+        .svgWidth(window.innerWidth)
+        .svgHeight(window.innerHeight)
+        .initialZoom(0.5)
+        .backgroundColor('#ffffff')
+        .defaultTextFill('#000000')
+        .nodeTextFill('#000000')
+        //.onNodeClick(d=> {console.log(d+' node clicked'); toggle(d); })
+        .onNodeClick((nodeId, node, chart) => {
+            console.log(nodeId+' node clicked');
+        })
+        .onNodeUpdate((data, nodeId, chart) => {
+            console.info("ask for node update " + nodeId);
+            console.dir(data);
+            data.firstName += " up";
+            chart.updateNodeData(data);
+        })
+        .rawData(data)
+        .flattenData()
+        .render();
+
+    //chart.selectTemplate('simple');
+    //chart.selectTemplate('omr');
+    //chart.selectTemplate('full');
+    //chart.selectTemplate('next');
+
+    //chart.setZoomFactor(0.4);
+
+    //chart.exportImage();
+
+</script>
+
+</body>
+
+</html>
