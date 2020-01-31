@@ -374,7 +374,7 @@ class TreeChart {
         //this.updateNodesState();
 
         this.flattenData();
-        this.render();
+        this.updateNodesState();
 
         return this;
     }
