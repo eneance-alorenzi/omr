@@ -364,16 +364,21 @@ class TreeChart {
     updateNodeData(rawData) {
         const attrs = this.getChartState();
         // locate node
-        const oldRawData = attrs.rawData.filter(({
-                                                data
-                                            }) => data.id === rawData.id)[0];
+        // const oldRawData = attrs.rawData.filter(({
+        //                                         data
+        //                                     }) => data.id === rawData.id)[0];
         // update data
-        const newRawData = {...oldRawData, ...rawData};
+        // const newRawData = {...oldRawData, ...rawData};
 
         // Redraw graph
         //this.update(attrs.root);
+
         // Update state of nodes and redraw graph
-        this.updateNodesState();
+        //this.updateNodesState();
+
+        this.flattenData();
+        this.render();
+
         return this;
     }
 
@@ -1207,18 +1212,18 @@ class TreeChart {
         attrs.data = d3.hierarchy(attrs.rawData)
                 .descendants()
                 .map((d, i) => Object.assign(d, {
-                    id: "node-" + i /*DOM.uid().id*/,
+                    //id: "node-" + i /*DOM.uid().id*/,
                     nodeId: "node-" + i
                 }))
                 .map(d => Object.assign(d.data, {
-                    id: d.id,
+                    //id: d.id,
                     nodeId: d.nodeId,
-                    parentId: d.parent && d.parent.id,
+                    //parentId: d.parent && d.parent.id,
                     parentNodeId: d.parent && d.parent.nodeId
                 })).map(d => {
 
                 let width = 500; //Math.round(Math.random() * 50 + 300);
-                let height = Math.round(Math.random() * 20 + 130 + 100) + 50 * Math.round(Math.random() * 2);
+                let height = 100;
 
                 const cornerShape = 'ROUNDED'; //['ORIGINAL', 'ROUNDED', 'CIRCLE'][Math.round(Math.random() * 2)];
                 const nodeImageWidth = 100;
@@ -1241,6 +1246,11 @@ class TreeChart {
                 const colorBackgroundGrey = 'lightgray';
                 const colorBackgroundBlue = '#3270E1';
 
+                // Data fix
+                d.jobTenure = d.jobTenure || 'N/A';
+                d.position = d.position || 'N/A';
+                // ---
+
                 let template = `<div style="margin-left:0; margin-top:0; font-size:16px; color: black; white-space: nowrap;">`;
                 switch (attrs.template) {
                     case 'simple':
@@ -1255,23 +1265,21 @@ class TreeChart {
                         break;
                     case 'omr' :
                     case 'full' :
-                        d.isGroupKeyPosition = d.keyPosition === 'GKP';
-                        d.isGroupKeyContributor = d.keyContributor === 'GKC';
-                        d.isCompanyKeyPosition = d.keyPosition === 'CKP';
-                        d.isCompanyKeyContributor = d.keyContributor === 'CKC';
-
-                        /// max 8 potential successors
+                        d.isGroupKeyPosition = d.keyPosition === 'group';
+                        d.isGroupKeyContributor = d.keyContributor === 'group';
+                        d.isCompanyKeyPosition = d.keyPosition === 'company';
+                        d.isCompanyKeyContributor = d.keyContributor === 'company';
 
                         d._criticalText = d.criticalExpert ? '<span style="color: blue; font-weight: bolder; font-size: 24px;">*</span>' : '';
                         d._highRetentionText = d.retentionRisk ? '<span style="color: red; font-weight: bold">!</span>' : '';
                         d._borderPosition = d.isGroupKeyPosition ? `border: 4px solid red; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : (d.isCompanyKeyPosition ? `border: 4px solid blue; border-radius: ${borderRadius}px ${borderRadius}px 0 0;` : '');
-                        d._colorName = d.isGroupKeyContributor ? 'red' : (d.isCompanyKeyContributor ? 'blue' : 'white');
+                        d._colorName = d.isGroupKeyContributor ? 'red' : (d.isCompanyKeyContributor ? 'blue' : 'black');
 
                         height = 92
                             + (d.futura ? 8 : 0)
                             + (d.isGroupKeyPosition || d.isCompanyKeyPosition ? 8 : 0)
                             + (d.leadSuccessor ? 42 : 0)
-                            + (d.potentialSuccessor ? 36 + 18 * d.potentialSuccessor.length: 0);
+                            + (d.potentialSuccessor ? 36 + 18 * d.potentialSuccessor.length : 0);
                         if (d.futura) {
                             template += `<div style="border: 4px dashed ${colorYellow}; border-radius: ${borderRadius}px ${borderRadius}px 0 0;">`;
                         }
@@ -1295,7 +1303,7 @@ class TreeChart {
                                 <div style="border: 2px solid ${colorBorderGray};">
                                     <ul>`;
                             d.potentialSuccessor.forEach(ps => {
-                                template += `<li>${ps.firstname} ${ps.lastname} ${ps.readiness}</li>`;
+                                template += `<li>${ps.firstname} ${ps.lastname} ${ps.readiness || 'N/A'}</li>`;
                             });
                             template += `
                                     </ul>
@@ -1306,7 +1314,7 @@ class TreeChart {
                             template += `<div style="padding: 10px 10px 20px 10px; color: white; background: ${colorBackgroundBlue}">`;
                             if (d.potentialNextStep) {
                                 d.potentialNextStep.forEach(ns => {
-                                    template += `<div>${ns.position} ${ns.readiness}</div>`;
+                                    template += `<div>${ns.position || 'N/A'} ${ns.readiness || 'N/A'}</div>`;
                                 });
                             }
                             template += ` </div> `;
@@ -1323,7 +1331,7 @@ class TreeChart {
                             <div style="padding: 10px 10px 20px 10px; color: white; background: ${colorBackgroundBlue}">`;
                         if (d.potentialNextStep) {
                             d.potentialNextStep.forEach(ns => {
-                                template += `<div>${ns.position} ${ns.readiness}</div>`;
+                                template += `<div>${ns.position || 'N/A'} ${ns.readiness || 'N/A'}</div>`;
                             });
                         }
                         template += ` </div> `;
@@ -1335,8 +1343,8 @@ class TreeChart {
                 template += `</div>`;
 
                 return {
-                    nodeId: d.id,
-                    parentNodeId: d.parentId,
+                    nodeId: d.nodeId,
+                    parentNodeId: d.parentNodeId,
                     width: width,
                     height: height,
                     borderWidth: 1,
@@ -1354,7 +1362,7 @@ class TreeChart {
                         alpha: 1,
                     },
                     nodeImage: {
-                        url: (d.avatar ? d.avatar : attrs.imagePath + '/default-avatar.jpg'),
+                        url: (d.avatar || attrs.imagePath + '/default-avatar.jpg'),
                         width: nodeImageWidth,
                         height: nodeImageHeight,
                         centerTopDistance: centerTopDistance,
